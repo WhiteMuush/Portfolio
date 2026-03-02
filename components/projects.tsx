@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "motion/react";
 import { Star, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface Project {
   num: string;
@@ -153,8 +153,53 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
 }
 
 export function Projects() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const springX = useSpring(cursorX, { damping: 25, stiffness: 200 });
+  const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
+  const isCursorInSection = useMotionValue(0);
+  const springOpacity = useSpring(isCursorInSection, { damping: 20, stiffness: 150 });
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+
+      const rect = section.getBoundingClientRect();
+      const inside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+      isCursorInSection.set(inside ? 1 : 0);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [cursorX, cursorY, isCursorInSection]);
+
   return (
-    <section id="projects" className="px-6 py-24 md:px-12 lg:px-20">
+    <section ref={sectionRef} id="projects" className="relative px-6 py-24 md:px-12 lg:px-20">
+      {/* Cursor follower */}
+      <motion.div
+        className="pointer-events-none fixed z-50"
+        style={{
+          left: springX,
+          top: springY,
+          x: 20,
+          y: 20,
+          opacity: springOpacity,
+        }}
+      >
+        <p className="whitespace-nowrap rounded-full border border-muted-foreground/20 bg-background/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm sm:text-[11px] sm:tracking-[0.2em]">
+          Cliquez pour découvrir
+        </p>
+      </motion.div>
+
       {/* Section label */}
       <motion.p
         initial={{ opacity: 0 }}

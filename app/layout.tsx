@@ -26,6 +26,8 @@ export const viewport: Viewport = {
   themeColor: "#f5f4f0",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export default function RootLayout({
@@ -35,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${dmSans.variable} ${dmSerif.variable}`}>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased min-h-dvh overflow-x-hidden text-base sm:text-lg">
         {children}
         <Analytics />
       </body>

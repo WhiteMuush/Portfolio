@@ -105,14 +105,18 @@ export function About() {
   }, [cursorX, cursorY, cursorOpacity]);
 
   return (
-    <section ref={sectionRef} id="about" className="px-6 py-24 md:px-12 lg:px-20 cursor-default select-none">
-      {/* Enchanté - follows cursor, only visible in this section */}
+    <section
+      ref={sectionRef}
+      id="about"
+      className="cursor-default select-none px-4 py-16 sm:px-6 sm:py-20 md:px-12 md:py-24 lg:px-20"
+    >
+      {/* Enchanté - follows cursor, hidden on touch devices */}
       {isSectionHovered && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="pointer-events-none fixed z-50"
+          className="pointer-events-none fixed z-50 hidden md:block"
           style={{
             left: springX,
             top: springY,
@@ -131,46 +135,44 @@ export function About() {
       <motion.p
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: "-45px" }}
         transition={{ duration: 0.6 }}
-        className="mb-16 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground"
+        className="mb-8 text-[10px] font-medium uppercase tracking-[0.10em] text-muted-foreground sm:mb-12 sm:text-[15px] sm:tracking-[0.2em] md:mb-16"
       >
         À propos
       </motion.p>
 
-      <div className="flex flex-col gap-16 lg:flex-row lg:gap-24">
-        {/* Left column — 70% */}
+      <div className="flex flex-col gap-10 sm:gap-12 md:gap-16 lg:flex-row lg:gap-24">
+        {/* Left column */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="lg:w-[70%]"
+          className="lg:w-[65%] xl:w-[70%]"
         >
-          <p className="font-serif text-2xl leading-relaxed text-foreground md:text-3xl lg:text-4xl">
+          <p className="font-serif text-xl leading-relaxed text-foreground sm:text-2xl md:text-3xl lg:text-4xl">
             <HoverText>
-              {"DevOps Junior passionné par l'automatisation, le scripting Bash, la sécurité et l'infrastructure. Je conçois des outils CLI qui simplifient les opérations complexes et crée des environnements résilients et reproductibles."}
+                {"Salut ! Melvin, 20 ans, je me spécialise dans le DevOps, le scripting, l'automatisation et l'infrastructure cloud. Mon approche allie rigueur technique et veille constante pour concevoir des systèmes performants, sécurisés et scalables."}
             </HoverText>
-          </p>
-          <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground">
           </p>
         </motion.div>
 
-        {/* Right column — 30% */}
+        {/* Right column */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="lg:w-[30%]"
+          className="lg:w-[35%] xl:w-[30%]"
         >
-          <ul className="flex flex-col gap-6">
+          <ul className="flex flex-row flex-wrap gap-6 sm:gap-8 lg:flex-col lg:gap-6">
             {INFO_ITEMS.map((item) => (
-              <li key={item.label}>
-                <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              <li key={item.label} className="min-w-[140px]">
+                <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground sm:text-[11px] sm:tracking-[0.2em]">
                   {item.label}
                 </p>
-                <p className="mt-1 text-base text-foreground">
+                <p className={`mt-1 text-sm text-foreground sm:text-base ${item.className ?? ""}`}>
                   <HoverText>{item.value}</HoverText>
                 </p>
               </li>
@@ -180,7 +182,7 @@ export function About() {
       </div>
 
       {/* Separator */}
-      <div className="mt-24 h-px w-full bg-border" />
+      <div className="mt-16 h-px w-full bg-border sm:mt-20 md:mt-24" />
     </section>
   );
 }

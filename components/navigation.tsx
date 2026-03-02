@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 const NAV_ITEMS = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
+  { label: "Schools", href: "#schools" },
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
 ];
