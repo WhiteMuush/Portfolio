@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useState, useCallback, useEffect, useRef } from "react";
 
 const INFO_ITEMS = [

@@ -113,55 +113,73 @@ function SchoolRow({ school, index }: { school: School; index: number }) {
 
 export function Schools() {
     const sectionRef = useRef<HTMLElement>(null);
+    const [isSectionHovered, setIsSectionHovered] = useState(false);
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
+    const cursorOpacity = useMotionValue(0);
     const springX = useSpring(cursorX, { damping: 25, stiffness: 200 });
     const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
-    const isCursorInSection = useMotionValue(0);
-    const springOpacity = useSpring(isCursorInSection, { damping: 20, stiffness: 150 });
+    const springOpacity = useSpring(cursorOpacity, { damping: 20, stiffness: 300 });
 
     useEffect(() => {
         const section = sectionRef.current;
         if (!section) return;
 
         const handleMouseMove = (e: MouseEvent) => {
-            cursorX.set(e.clientX);
-            cursorY.set(e.clientY);
-
             const rect = section.getBoundingClientRect();
             const inside =
                 e.clientX >= rect.left &&
                 e.clientX <= rect.right &&
                 e.clientY >= rect.top &&
                 e.clientY <= rect.bottom;
-            isCursorInSection.set(inside ? 1 : 0);
+            if (inside) {
+                cursorX.set(e.clientX);
+                cursorY.set(e.clientY);
+                cursorOpacity.set(1);
+                setIsSectionHovered(true);
+            } else {
+                cursorOpacity.set(0);
+                setIsSectionHovered(false);
+            }
         };
 
-        window.addEventListener("mousemove", handleMouseMove);
-        return () => window.removeEventListener("mousemove", handleMouseMove);
-    }, [cursorX, cursorY, isCursorInSection]);
+        section.addEventListener("mousemove", handleMouseMove);
+        section.addEventListener("mouseleave", () => {
+            cursorOpacity.set(0);
+            setIsSectionHovered(false);
+        });
+
+        return () => {
+            section.removeEventListener("mousemove", handleMouseMove);
+            section.removeEventListener("mouseleave", () => {
+                cursorOpacity.set(0);
+                setIsSectionHovered(false);
+            });
+        };
+    }, [cursorX, cursorY, cursorOpacity]);
 
     return (
-        <section ref={sectionRef} id="schools" className="relative px-6 py-24 md:px-12 lg:px-20">
-
-            {/* Cursor follower */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="pointer-events-none fixed z-50"
-                style={{
-                    left: springX,
-                    top: springY,
-                    x: 20,
-                    y: 20,
-                    opacity: springOpacity,
-                }}
-            >
-                <p className="whitespace-nowrap rounded-full border border-muted-foreground/20 bg-background/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm sm:text-[11px] sm:tracking-[0.2em]">
-                    Une envie d&apos;apprendre
-                </p>
-            </motion.div>
+        <section ref={sectionRef} id="schools" className="cursor-default select-none relative px-6 py-24 md:px-12 lg:px-20">
+            {/* Texte qui suit le curseur, style About */}
+            {isSectionHovered && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="pointer-events-none fixed z-50 hidden md:block"
+                    style={{
+                        left: springX,
+                        top: springY,
+                        x: 20,
+                        y: 20,
+                        opacity: springOpacity,
+                    }}
+                >
+                    <p className="whitespace-nowrap rounded-full border border-muted-foreground/20 bg-background/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm sm:text-[11px] sm:tracking-[0.2em]">
+                        L'envie d'apprendre 
+                    </p>
+                </motion.div>
+            )}
 
             {/* Section label */}
             <motion.p
