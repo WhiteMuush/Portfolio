@@ -30,7 +30,7 @@ const PROJECTS: Project[] = [
     desc: "Déploiement d'infrastructure + synchronisation de serveurs",
     why: "J'ai développé Plutus pour automatiser le provisionnement et la synchronisation de serveurs dans des environnements multi-nodes. L'objectif était de réduire les erreurs humaines lors des déploiements répétitifs et de garantir une cohérence totale entre les machines de production.",
     stack: "Bash & PowerShell",
-    url: "https://github.com/WhiteMuush/Plutus",
+    url: "https://github.com/WhiteMuush/Plutus---ProjetFilsRouge01",
   },
   {
     num: "03",
