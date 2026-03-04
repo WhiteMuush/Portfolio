@@ -4,19 +4,19 @@ import { motion, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef } from "react";
 
 const SKILLS_ACQUIS = [
-  { category: "Scripting", values: "Bash, PowerShell, Python" },
+  { category: "Scripting", values: "Bash, PowerShell, Python, Template ARM" },
   { category: "Systèmes", values: "Linux, Windows Server, WSL" },
   { category: "Réseau", values: "IP, Firewall, DNS, VLAN" },
   { category: "Dépôt", values: "GitHub, Gitlab, Azure DevOps" },
-  { category: "Microsoft Azure", values: "VMs, App Services, Azure Functions, Azure AD, Blob Storage, Logic Apps, ARM Templates, Azure Monitor, Key Vault" },
+  { category: "Microsoft Azure", values: "VMs, App Services, Azure Functions, Microsoft Entra ID, Blob Storage, Logic Apps, ARM Templates, Azure Monitor, Key Vault" },
   { category: "Virtualisation", values: "Hyper-V, VMware, VirtualBox" },
-  { category: "DevOps", values: "GitHub Actions, GitLab CI" },
 ];
 
 const SKILLS_EN_COURS = [
   { category: "Conteneurisation", values: "Docker, Kubernetes" },
   { category: "Monitoring", values: "Prometheus, Grafana" },
-    { category: "Infrastructure as code", values: "Terraform, Ansible" },
+  { category: "Infrastructure as code", values: "Terraform, Ansible" },
+  { category: "DevOps", values: "GitHub Actions, GitLab CI" },
 ];
 
 export function Skills() {
