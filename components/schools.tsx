@@ -34,7 +34,7 @@ const SCHOOLS: School[] = [
         location: "Toulouse, FR",
     },
     {
-        year: "2022 — 2023",
+        year: "2021 — 2023",
         name: "Lycée Saint Joseph La Salle",
         diploma: "STI2D",
         desc: "Baccalauréat technologique avec spécialité Systèmes d'Information et Numérique (SIN). Études des systèmes embarqués, réseaux, et programmation.",
