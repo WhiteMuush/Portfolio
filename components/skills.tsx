@@ -7,14 +7,14 @@ const SKILLS_ACQUIS = [
   { category: "Scripting", values: "Bash, PowerShell, Python" },
   { category: "Systèmes", values: "Linux, Windows Server, WSL" },
   { category: "Réseau", values: "IP, Firewall, DNS, VLAN" },
-  { category: "Dépot", values: "Github, Gitlab, Azure DevOps" },
+  { category: "Dépôt", values: "GitHub, Gitlab, Azure DevOps" },
   { category: "Microsoft Azure", values: "VMs, App Services, Azure Functions, Azure AD, Blob Storage, Logic Apps, ARM Templates, Azure Monitor, Key Vault" },
-  { category: "Virtualisation", values: "Hyper-V, VMWare, virtualbox" },
-  { category: "DevOps", values: "Github action, GitLab CI" },
+  { category: "Virtualisation", values: "Hyper-V, VMware, VirtualBox" },
+  { category: "DevOps", values: "GitHub Actions, GitLab CI" },
 ];
 
 const SKILLS_EN_COURS = [
-  { category: "Containerisation", values: "Docker, Kubernetes" },
+  { category: "Conteneurisation", values: "Docker, Kubernetes" },
   { category: "Monitoring", values: "Prometheus, Grafana" },
     { category: "Infrastructure as code", values: "Terraform, Ansible" },
 ];

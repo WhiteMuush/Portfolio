@@ -100,7 +100,7 @@ export function Hero() {
           className="hidden items-center gap-6 md:flex lg:gap-8"
         >
           <a
-            href="https://github.com/WhiteMuush"
+            href="https://GitHub.com/WhiteMuush"
             target="_blank"
             rel="noopener noreferrer"
             className="group cursor-pointer text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 hover:text-red-500"
@@ -215,7 +215,7 @@ export function Hero() {
           className="flex items-center gap-5 sm:gap-6 md:hidden"
         >
           <a
-            href="https://github.com/WhiteMuush"
+            href="https://GitHub.com/WhiteMuush"
             target="_blank"
             rel="noopener noreferrer"
             className="group cursor-pointer text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 hover:text-red-500"

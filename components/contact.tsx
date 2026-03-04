@@ -121,7 +121,7 @@ export function Contact() {
           </span>
         </a>
         <a
-          href="https://github.com/WhiteMuush"
+          href="https://GitHub.com/WhiteMuush"
           target="_blank"
           rel="noopener noreferrer"
           className="group cursor-pointer select-none text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 hover:text-foreground"

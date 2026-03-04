@@ -153,7 +153,7 @@ export function About() {
         >
           <p className="font-serif text-xl leading-relaxed text-foreground sm:text-2xl md:text-3xl lg:text-4xl">
             <HoverText>
-                {"Salut ! Melvin, 20 ans, je m'oriente en tant que Technicien Cloud avec une appétance pour le DevOps, le scripting, l'automatisation et l'infrastructure cloud. Mon approche allie rigueur technique et veille constante pour concevoir des systèmes performants, sécurisés et scalables."}
+                {"Salut ! Melvin, 20 ans, je m'oriente en tant que Technicien Cloud avec une appétence pour le DevOps, le scripting, l'automatisation et l'infrastructure cloud. Mon approche allie rigueur technique et veille constante pour concevoir des systèmes performants, sécurisés et évolutifs."}
             </HoverText>
           </p>
         </motion.div>

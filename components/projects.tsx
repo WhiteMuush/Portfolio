@@ -22,7 +22,7 @@ const PROJECTS: Project[] = [
     why: "J'ai créé Sandevistan pour centraliser mes outils de pentest dans une interface unifiée. Plutôt que de jongler entre des dizaines de scripts éparpillés, j'ai voulu proposer une suite cohérente avec mise à jour automatique et configuration modulaire, améliorant ainsi mon efficacité lors des engagements offensifs.",
     stars: 98,
     stack: "Bash",
-    url: "https://github.com/WhiteMuush/Sandevistan",
+    url: "https://GitHub.com/WhiteMuush/Sandevistan",
   },
   {
     num: "02",
@@ -30,7 +30,7 @@ const PROJECTS: Project[] = [
     desc: "Déploiement d'infrastructure + synchronisation de serveurs",
     why: "J'ai développé Plutus pour automatiser le provisionnement et la synchronisation de serveurs dans des environnements multi-nodes. L'objectif était de réduire les erreurs humaines lors des déploiements répétitifs et de garantir une cohérence totale entre les machines de production.",
     stack: "Bash & PowerShell",
-    url: "https://github.com/WhiteMuush/Plutus---ProjetFilsRouge01",
+    url: "https://GitHub.com/WhiteMuush/Plutus---ProjetFilsRouge01",
   },
   {
     num: "03",
@@ -38,7 +38,7 @@ const PROJECTS: Project[] = [
     desc: "Boîte à outils d'énumération AD avec plus de 10 outils intégrés",
     why: "L'énumération Active Directory est une phase critique de tout pentest interne. Ghostline regroupe les outils les plus pertinents dans un workflow structuré, permettant une reconnaissance rapide et méthodique des environnements AD sans perdre de temps en configuration manuelle.",
     stack: "Bash",
-    url: "https://github.com/WhiteMuush/Ghostline",
+    url: "https://GitHub.com/WhiteMuush/Ghostline",
   },
   {
     num: "04",
@@ -46,7 +46,7 @@ const PROJECTS: Project[] = [
     desc: "Framework de pentest modulaire",
     why: "Kraken est né du besoin d'avoir un framework extensible où chaque module peut être ajouté, retiré ou mis à jour indépendamment. Cette approche modulaire permet d'adapter l'outil à chaque mission sans embarquer de fonctionnalités superflues, tout en gardant une base solide et maintenable.",
     stack: "Bash",
-    url: "https://github.com/WhiteMuush/Kraken",
+    url: "https://GitHub.com/WhiteMuush/Kraken",
   },
   {
     num: "05",
@@ -54,7 +54,7 @@ const PROJECTS: Project[] = [
     desc: "Sécuriser rapidement une machine Linux fraîchement installée",
     why: "Une installation Linux par défaut laisse de nombreuses surfaces d'attaque exposées. FreshLinux applique automatiquement un ensemble de durcissements, pare-feu, désactivation de services inutiles, configuration SSH, et audit des permissions pour atteindre un niveau de sécurité de base en quelques minutes.",
     stack: "Bash",
-    url: "https://github.com/WhiteMuush/FreshLinux",
+    url: "https://GitHub.com/WhiteMuush/FreshLinux",
   },
   {
     num: "06",
@@ -62,7 +62,7 @@ const PROJECTS: Project[] = [
     desc: "Réveil à distance via Wake-on-LAN et connexion SSH automatique sur Windows, avec une interface graphique simple",
     why: "WakeSSH_WIN permet de réveiller une machine distante via Wake-on-LAN puis de s'y connecter automatiquement en SSH une fois qu'elle est en ligne. C'est un outil pratique pour administrer des machines Windows à distance sans avoir à les laisser allumées en permanence, combinant WoL et SSH dans un seul workflow.",
     stack: "PowerShell",
-    url: "https://github.com/WhiteMuush/WakeSSH_WIN",
+    url: "https://GitHub.com/WhiteMuush/WakeSSH_WIN",
   },
 ];
 
