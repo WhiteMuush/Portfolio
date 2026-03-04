@@ -83,7 +83,7 @@ export function Hero() {
           transition={{ delay: 1.4, duration: 0.8 }}
           className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted-foreground sm:text-[12px] md:text-[13px] md:tracking-[0.2em]"
         >
-          {"DevOps Junior — France/Toulouse".split("").map((char, index) => (
+          {"Technicien Cloud Junior — France/Toulouse".split("").map((char, index) => (
             <span
               key={index}
               className="char-span inline-block transition-colors duration-200"

@@ -17,9 +17,9 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Melvin Petit ~ DevOps Junior",
+  title: "Melvin Petit ~ Technicien Cloud Junior",
   description:
-    "Portfolio de Melvin Petit — Ingénieur DevOps Junior spécialisé dans l'automatisation d'infrastructure et les solutions Cloud. Passionné par le scripting et l'intégration continue.",
+    "Portfolio de Melvin Petit — Technicien Cloud Junior spécialisé dans l'automatisation d'infrastructure et les solutions Cloud. Passionné par le scripting et l'intégration continue.",
 };
 
 export const viewport: Viewport = {
