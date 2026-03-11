@@ -134,7 +134,7 @@ export function Hero() {
             duration: 0.5,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          className="cursor-default text-center font-serif text-[15vw] font-normal uppercase leading-[0.85] tracking-tight sm:text-[13vw] md:text-[11vw] lg:text-[10vw] xl:text-[9vw] 2xl:text-[8vw] bg-gradient-to-br from-foreground via-primary to-primary/60 bg-clip-text text-transparent"
+          className="cursor-default whitespace-nowrap text-center font-serif text-[15vw] font-normal uppercase leading-[0.85] tracking-tight sm:text-[13vw] md:text-[11vw] lg:text-[10vw] xl:text-[9vw] 2xl:text-[8vw] bg-gradient-to-br from-foreground via-primary to-primary/60 bg-clip-text text-transparent"
           aria-label={FULL_NAME}
         >
           {FULL_NAME.split("").map((char, index) => (

@@ -1,95 +1,109 @@
 import * as React from 'react'
 
-const MOBILE_BREAKPOINT = 768
+// ─── Breakpoints ────────────────────────────────────────────────────────────
 
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
+export const BREAKPOINTS = {
+  sm: 480,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+} as const
 
-  React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
-    mql.addEventListener('change', onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener('change', onChange)
-  }, [])
+export type Breakpoint = keyof typeof BREAKPOINTS
 
-  return !!isMobile
-}
+// ─── Helpers internes ────────────────────────────────────────────────────────
 
-const TABLET_BREAKPOINT = 1024
-const SMALL_MOBILE_BREAKPOINT = 480
-
-export function useIsTablet() {
-  const [isTablet, setIsTablet] = React.useState<boolean | undefined>(undefined)
-
-  React.useEffect(() => {
-    const mql = window.matchMedia(
-      `(min-width: ${MOBILE_BREAKPOINT}px) and (max-width: ${TABLET_BREAKPOINT - 1}px)`
-    )
-    const onChange = () => {
-      const width = window.innerWidth
-      setIsTablet(width >= MOBILE_BREAKPOINT && width < TABLET_BREAKPOINT)
-    }
-    mql.addEventListener('change', onChange)
-    onChange()
-    return () => mql.removeEventListener('change', onChange)
-  }, [])
-
-  return !!isTablet
-}
-
-export function useIsSmallMobile() {
-  const [isSmallMobile, setIsSmallMobile] = React.useState<boolean | undefined>(undefined)
+/**
+ * Factory générique : retourne true si la fenêtre correspond à la media query.
+ * SSR-safe : initialise à `undefined` côté serveur.
+ */
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = React.useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia(query).matches
+  })
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${SMALL_MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsSmallMobile(window.innerWidth < SMALL_MOBILE_BREAKPOINT)
-    }
-    mql.addEventListener('change', onChange)
-    onChange()
-    return () => mql.removeEventListener('change', onChange)
-  }, [])
+    if (typeof window === 'undefined') return
 
-  return !!isSmallMobile
+    const mql = window.matchMedia(query)
+    const onChange = (e: MediaQueryListEvent) => setMatches(e.matches)
+
+    mql.addEventListener('change', onChange)
+    setMatches(mql.matches)
+
+    return () => mql.removeEventListener('change', onChange)
+  }, [query])
+
+  return matches
 }
 
-export type Breakpoint = 'sm' | 'md' | 'lg' | 'xl'
+// ─── Hooks publics ───────────────────────────────────────────────────────────
 
+/** < 480px */
+export function useIsSmallMobile(): boolean {
+  return useMediaQuery(`(max-width: ${BREAKPOINTS.sm - 1}px)`)
+}
+
+/** < 768px */
+export function useIsMobile(): boolean {
+  return useMediaQuery(`(max-width: ${BREAKPOINTS.md - 1}px)`)
+}
+
+/** 768px – 1023px */
+export function useIsTablet(): boolean {
+  return useMediaQuery(
+    `(min-width: ${BREAKPOINTS.md}px) and (max-width: ${BREAKPOINTS.lg - 1}px)`
+  )
+}
+
+/** ≥ 1024px */
+export function useIsDesktop(): boolean {
+  return useMediaQuery(`(min-width: ${BREAKPOINTS.lg}px)`)
+}
+
+/** Retourne le breakpoint actif : 'sm' | 'md' | 'lg' | 'xl' */
 export function useBreakpoint(): Breakpoint {
-  const [breakpoint, setBreakpoint] = React.useState<Breakpoint>('lg')
+  const [bp, setBp] = React.useState<Breakpoint>(() => {
+    if (typeof window === 'undefined') return 'lg'
+    return resolveBreakpoint(window.innerWidth)
+  })
 
   React.useEffect(() => {
-    const getBreakpoint = (): Breakpoint => {
-      const width = window.innerWidth
-      if (width < SMALL_MOBILE_BREAKPOINT) return 'sm'
-      if (width < MOBILE_BREAKPOINT) return 'md'
-      if (width < TABLET_BREAKPOINT) return 'lg'
-      return 'xl'
-    }
+    if (typeof window === 'undefined') return
 
-    const onChange = () => setBreakpoint(getBreakpoint())
+    const onChange = () => setBp(resolveBreakpoint(window.innerWidth))
 
-    window.addEventListener('resize', onChange)
-    onChange()
-    return () => window.removeEventListener('resize', onChange)
+    // ResizeObserver > resize event (pas de throttle natif sur resize)
+    const ro = new ResizeObserver(() => onChange())
+    ro.observe(document.documentElement)
+
+    return () => ro.disconnect()
   }, [])
 
-  return breakpoint
+  return bp
 }
 
-export function useIsTouchDevice() {
+/** Détecte les appareils tactiles */
+export function useIsTouchDevice(): boolean {
   const [isTouch, setIsTouch] = React.useState(false)
 
   React.useEffect(() => {
     setIsTouch(
       'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      window.matchMedia('(pointer: coarse)').matches
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia('(pointer: coarse)').matches
     )
   }, [])
 
   return isTouch
+}
+
+// ─── Utils ───────────────────────────────────────────────────────────────────
+
+function resolveBreakpoint(width: number): Breakpoint {
+  if (width < BREAKPOINTS.sm) return 'sm'
+  if (width < BREAKPOINTS.md) return 'md'
+  if (width < BREAKPOINTS.lg) return 'lg'
+  return 'xl'
 }
