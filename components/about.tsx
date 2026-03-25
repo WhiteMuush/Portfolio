@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useCursorSection } from "@/hooks/use-cursor-section";
 
 const INFO_ITEMS = [
   { label: "Localisation", value: "France/Toulouse" },
@@ -69,78 +70,23 @@ function HoverText({ children, className }: { children: string; className?: stri
 }
 
 export function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isSectionHovered, setIsSectionHovered] = useState(false);
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  const cursorOpacity = useMotionValue(0);
-
-  const springX = useSpring(cursorX, { damping: 25, stiffness: 200 });
-  const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
-  const springOpacity = useSpring(cursorOpacity, { damping: 20, stiffness: 300 });
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      cursorOpacity.set(1);
-      setIsSectionHovered(true);
-    };
-
-    const handleMouseLeave = () => {
-      cursorOpacity.set(0);
-      setIsSectionHovered(false);
-    };
-
-    section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [cursorX, cursorY, cursorOpacity]);
+  const cursorProps = useCursorSection("Enchanté 👋");
 
   return (
     <section
-      ref={sectionRef}
       id="about"
-      className="cursor-default select-none px-4 py-16 sm:px-6 sm:py-20 md:px-12 md:py-24 lg:px-20"
+      {...cursorProps}
+      className="cursor-default select-none px-5 py-16 sm:px-8 sm:py-20 md:px-10 md:py-24 lg:px-14"
     >
-      {/* Enchanté - follows cursor, hidden on touch devices */}
-      {isSectionHovered && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="pointer-events-none fixed z-50 hidden md:block"
-          style={{
-            left: springX,
-            top: springY,
-            x: 20,
-            y: 20,
-            opacity: springOpacity,
-          }}
-        >
-          <p className="whitespace-nowrap rounded-full border border-muted-foreground/20 bg-background/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm sm:text-[11px] sm:tracking-[0.2em]">
-            Enchanté 👋
-          </p>
-        </motion.div>
-      )}
-
-      {/* Section label */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-45px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-8 text-[10px] font-medium uppercase tracking-[0.10em] text-muted-foreground sm:mb-12 sm:text-[15px] sm:tracking-[0.2em] md:mb-16"
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-8 font-serif text-[16vw] leading-none tracking-tight text-foreground sm:text-[12vw] md:text-[9vw] lg:text-[7vw] sm:mb-12 md:mb-16"
       >
         À propos
-      </motion.p>
+      </motion.h2>
 
       <div className="flex flex-col gap-10 sm:gap-12 md:gap-16 lg:flex-row lg:gap-24">
         {/* Left column */}
@@ -151,9 +97,9 @@ export function About() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="lg:w-[65%] xl:w-[70%]"
         >
-          <p className="font-serif text-xl leading-relaxed text-foreground sm:text-2xl md:text-3xl lg:text-4xl">
+          <p className="font-serif text-xl leading-relaxed text-foreground sm:text-2xl md:text-3xl lg:text-4xl text-pretty">
             <HoverText>
-                {"Enchanté ! Je m'appelle Melvin et je m'oriente en tant qu'Administrateur Systèmes & Cloud Junior avec une appétence pour le DevOps, le scripting, l'automatisation et l'infrastructure cloud. Mon approche allie rigueur technique et veille constante pour concevoir des systèmes performants, sécurisés et évolutifs."}
+              {"Enchanté ! Je m'appelle Melvin et je m'oriente en tant qu'Administrateur Systèmes & Cloud Junior avec une appétence pour le DevOps, la sécurité, l'automatisation et l'infrastructure cloud. Mon approche allie rigueur technique et veille constante pour concevoir des systèmes performants, sécurisés et évolutifs."}
             </HoverText>
           </p>
         </motion.div>

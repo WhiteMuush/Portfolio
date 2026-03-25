@@ -1,206 +1,186 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, AnimatePresence } from "motion/react";
-import { ChevronDown } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { useState } from "react";
+import { useCursorSection } from "@/hooks/use-cursor-section";
 
 interface School {
-    year: string;
-    name: string;
-    diploma: string;
-    desc: string;
-    location: string;
+  year: string;
+  name: string;
+  diploma: string;
+  desc: string;
+  location: string;
 }
+
 const SCHOOLS: School[] = [
-    {
-        year: "2025 — 2026",
-        name: "IFORM - bootcamp",
-        diploma: "Bachelor Administrateur Système et Réseaux & DevOps",
-        desc: "Apprentissage intensif de l'administration système cloud et du DevOps. Developpement de compétences avancées en scripting, gestion d'infrastructure, CI/CD. Réalisation de projets pratiques pour maîtriser les outils et méthodologies DevOps modernes.",
-        location: "Toulouse, FR",
-    },
-    {
-        year: "Juill - Aout 2025",
-        name: "CIRISI - stage",
-        diploma: "Administrateur Système et Réseaux",
-        desc: "Maintenance et dépannage des matériels SIC, gestion des réseaux du ministère de la Défense et suivi opérationnel des ACSSI (Articles Contrôlés de la Sécurité des Systèmes d'Information).",
-        location: "Toulouse, FR",
-    },
-    {
-        year: "2023 — 2025",
-        name: "Ynov Campus",
-        diploma: "Bachelor Informatique",
-        desc: "Apprentissage des fondamentaux en développement, réseaux, systèmes d'exploitation et bases de données. Introduction au développement full-stack et aux méthodologies agiles.",
-        location: "Toulouse, FR",
-    },
-    {
-        year: "2021 — 2023",
-        name: "Lycée Saint Joseph La Salle",
-        diploma: "STI2D",
-        desc: "Baccalauréat technologique avec spécialité Systèmes d'Information et Numérique (SIN). Études des systèmes embarqués, réseaux, et programmation.",
-        location: "Toulouse, FR",
-    },
+  {
+    year: "2025 — 2026",
+    name: "IFORM",
+    diploma: "Bachelor Administrateur Système et Réseaux & DevOps",
+    desc: "Apprentissage intensif de l'administration système cloud et du DevOps. Compétences avancées en scripting, gestion d'infrastructure, Microsoft Azure. Réalisation de projets pratiques pour maîtriser les outils et méthodologies DevOps modernes.",
+    location: "Toulouse, FR",
+  },
+  {
+    year: "Juill — Août 2025",
+    name: "CIRISI",
+    diploma: "Stage — Administrateur Système et Réseaux",
+    desc: "Maintenance et dépannage des matériels SIC, gestion des réseaux du ministère de la Défense et suivi opérationnel des ACSSI (Articles Contrôlés de la Sécurité des Systèmes d'Information).",
+    location: "Toulouse, FR",
+  },
+  {
+    year: "2023 — 2025",
+    name: "YNOV CAMPUS",
+    diploma: "Bachelor Informatique",
+    desc: "Apprentissage des fondamentaux en développement, réseaux, systèmes d'exploitation et bases de données. Introduction au développement full-stack et aux méthodologies agiles.",
+    location: "Toulouse, FR",
+  },
+  {
+    year: "2021 — 2023",
+    name: "LYCÉE ST JOSEPH",
+    diploma: "Baccalauréat STI2D",
+    desc: "Spécialité Systèmes d'Information et Numérique (SIN). Études des systèmes embarqués, réseaux, et programmation.",
+    location: "Toulouse, FR",
+  },
 ];
-function SchoolRow({ school, index }: { school: School; index: number }) {
-    const [expanded, setExpanded] = useState(false);
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: index * 0.06 }}
-            className="border-b border-border"
-        >
-            <div
-                className="group flex cursor-pointer items-baseline gap-4 py-5 transition-colors duration-300 md:gap-6"
-                onClick={() => setExpanded((prev) => !prev)}
-            >
-                {/* Year */}
-                <span className="w-30 shrink-0 text-sm tabular-nums text-muted-foreground transition-colors duration-300 group-hover:text-accent">
-                    {school.year}
-                </span>
-
-                {/* School name */}
-                <span className="relative shrink-0 font-serif text-lg tracking-wide text-foreground transition-colors duration-300 group-hover:text-foreground md:text-xl">
-                    {school.name}
-                    <span className="absolute bottom-0 left-0 h-px w-0 bg-foreground transition-all duration-500 group-hover:w-full" />
-                </span>
-
-                {/* Separator dash */}
-                <span className="hidden text-muted-foreground/40 md:inline">&mdash;</span>
-
-                {/* Diploma */}
-                <span className="hidden flex-1 text-sm text-muted-foreground md:inline">
-                    {school.diploma}
-                </span>
-
-                {/* Location */}
-                <span className="ml-auto text-[11px] font-medium uppercase tracking-[0.15em] text-muted-foreground md:ml-0">
-                    {school.location}
-                </span>
-
-                {/* Expand icon */}
-                <span className="text-sm text-muted-foreground transition-all duration-300 group-hover:text-foreground">
-                    <ChevronDown
-                        className={`h-4 w-4 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
-                    />
-                </span>
-            </div>
-
-            {/* Expandable description */}
-            <AnimatePresence initial={false}>
-                {expanded && (
-                    <motion.div
-                        key="desc"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                    >
-                        <div className="flex items-start gap-4 pb-5 pl-28 md:gap-6 md:pl-[7.5rem]">
-                            <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                                {school.desc}
-                            </p>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.div>
-    );
-}
 
 export function Schools() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const [isSectionHovered, setIsSectionHovered] = useState(false);
-    const cursorX = useMotionValue(-100);
-    const cursorY = useMotionValue(-100);
-    const cursorOpacity = useMotionValue(0);
-    const springX = useSpring(cursorX, { damping: 25, stiffness: 200 });
-    const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
-    const springOpacity = useSpring(cursorOpacity, { damping: 20, stiffness: 300 });
+  const [hovered, setHovered] = useState<School | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const cursorProps = useCursorSection("L'envie d'apprendre");
 
-    useEffect(() => {
-        const section = sectionRef.current;
-        if (!section) return;
+  return (
+    <section
+      id="schools"
+      {...cursorProps}
+      className="relative cursor-default select-none overflow-hidden px-5 py-28 sm:px-8 md:px-10 md:py-32 lg:px-14"
+    >
+      {/* Numéro filigrane */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute right-6 top-16 hidden select-none font-serif leading-none text-foreground/[0.08] md:block md:right-12 lg:right-20"
+        style={{ fontSize: "clamp(120px, 20vw, 300px)" }}
+      >
+        02
+      </span>
 
-        const handleMouseMove = (e: MouseEvent) => {
-            const rect = section.getBoundingClientRect();
-            const inside =
-                e.clientX >= rect.left &&
-                e.clientX <= rect.right &&
-                e.clientY >= rect.top &&
-                e.clientY <= rect.bottom;
-            if (inside) {
-                cursorX.set(e.clientX);
-                cursorY.set(e.clientY);
-                cursorOpacity.set(1);
-                setIsSectionHovered(true);
-            } else {
-                cursorOpacity.set(0);
-                setIsSectionHovered(false);
-            }
-        };
+      {/* Section label — text reveal */}
+      <div className="mb-4 overflow-hidden">
+        <motion.p
+          initial={{ y: "110%" }}
+          whileInView={{ y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-[15px] font-medium uppercase tracking-[0.2em] text-muted-foreground"
+        >
+          Mon parcours scolaire
+        </motion.p>
+      </div>
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-16 font-serif text-[16vw] leading-none tracking-tight text-foreground sm:text-[12vw] md:text-[9vw] lg:text-[7vw] md:mb-20"
+      >
+        Formation
+      </motion.h2>
 
-        section.addEventListener("mousemove", handleMouseMove);
-        section.addEventListener("mouseleave", () => {
-            cursorOpacity.set(0);
-            setIsSectionHovered(false);
-        });
+      {/* Liste */}
+      <div className="flex flex-col">
+        {SCHOOLS.map((school, i) => (
+          <motion.div
+            key={school.name}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            whileInView={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            animate={{
+              opacity: hovered && hovered.name !== school.name ? 0.25 : 1,
+            }}
+            className="relative border-b border-border"
+            onMouseEnter={() => setHovered(school)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            {/* Ligne bleue qui s'étire au hover */}
+            <motion.div
+              className="absolute bottom-0 left-0 h-px"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: hovered?.name === school.name ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              style={{ originX: 0, width: "100%", background: "#3b82f6" }}
+            />
 
-        return () => {
-            section.removeEventListener("mousemove", handleMouseMove);
-            section.removeEventListener("mouseleave", () => {
-                cursorOpacity.set(0);
-                setIsSectionHovered(false);
-            });
-        };
-    }, [cursorX, cursorY, cursorOpacity]);
-
-    return (
-        <section ref={sectionRef} id="schools" className="cursor-default select-none relative px-6 py-24 md:px-12 lg:px-20">
-            {/* Texte qui suit le curseur, style About */}
-            {isSectionHovered && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="pointer-events-none fixed z-50 hidden md:block"
-                    style={{
-                        left: springX,
-                        top: springY,
-                        x: 20,
-                        y: 20,
-                        opacity: springOpacity,
-                    }}
-                >
-                    <p className="whitespace-nowrap rounded-full border border-muted-foreground/20 bg-background/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm sm:text-[11px] sm:tracking-[0.2em]">
-                        L'envie d'apprendre 
-                    </p>
-                </motion.div>
-            )}
-
-            {/* Section label */}
-            <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6 }}
-                className="mb-16 text-[15px] font-medium uppercase tracking-[0.2em] text-muted-foreground"
+            {/* Row cliquable */}
+            <div
+              className="flex cursor-pointer items-start justify-between gap-6 py-8 md:py-10 lg:py-12"
+              onClick={() => setExpanded(expanded === school.name ? null : school.name)}
             >
-                Mon parcours scolaire
-            </motion.p>
+              <div className="flex min-w-0 gap-4 md:gap-8">
+                <motion.span
+                  animate={{ color: hovered?.name === school.name ? "#3b82f6" : "" }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-2 w-28 shrink-0 text-[11px] tabular-nums text-muted-foreground md:text-sm"
+                >
+                  {school.year}
+                </motion.span>
+                <div className="min-w-0">
+                  <motion.p
+                    animate={{ x: hovered?.name === school.name ? 10 : 0 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="font-serif text-2xl tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl"
+                  >
+                    {school.name}
+                  </motion.p>
+                  <motion.p
+                    animate={{
+                      opacity: hovered?.name === school.name ? 1 : 0.5,
+                      x: hovered?.name === school.name ? 10 : 0,
+                    }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base"
+                  >
+                    {school.diploma}
+                  </motion.p>
+                </div>
+              </div>
 
-            {/* School list */}
-            <div className="flex flex-col">
-                {SCHOOLS.map((school, i) => (
-                    <SchoolRow key={school.year} school={school} index={i} />
-                ))}
+              <div className="flex shrink-0 flex-col items-end gap-2 pt-2">
+                <motion.span
+                  animate={{
+                    rotate: expanded === school.name ? 45 : 0,
+                    color: hovered?.name === school.name ? "#3b82f6" : "",
+                  }}
+                  transition={{ duration: 0.25 }}
+                  className="text-xl text-muted-foreground"
+                >
+                  +
+                </motion.span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                  {school.location}
+                </span>
+              </div>
             </div>
 
-            {/* Separator */}
-            <div className="mt-24 h-px w-full bg-border" />
-        </section>
-    );
+            {/* Description expandable */}
+            <AnimatePresence initial={false}>
+              {expanded === school.name && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="overflow-hidden"
+                >
+                  <p className="pb-8 pl-32 pr-12 text-sm leading-relaxed text-muted-foreground md:pl-36 md:text-base lg:pb-10">
+                    {school.desc}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        ))}
+      </div>
+
+    </section>
+  );
 }

@@ -1,136 +1,150 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "motion/react";
-import { useEffect, useRef } from "react";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { useCursorSection } from "@/hooks/use-cursor-section";
 
-const SKILLS_ACQUIS = [
-  { category: "Scripting", values: "Bash, PowerShell, Python, Template ARM" },
-  { category: "Systèmes", values: "Linux, Windows Server, WSL" },
-  { category: "Réseau", values: "IP, Firewall, DNS, VLAN" },
-  { category: "Dépôt", values: "GitHub, Gitlab, Azure DevOps" },
-  { category: "Microsoft Azure", values: "VMs, App Services, Azure Functions, Microsoft Entra ID, Blob Storage, Logic Apps, ARM Templates, Azure Monitor, Key Vault" },
-  { category: "Virtualisation", values: "Hyper-V, VMware, VirtualBox" },
-];
-
-const SKILLS_EN_COURS = [
-  { category: "Conteneurisation", values: "Docker, Kubernetes" },
-  { category: "Monitoring", values: "Prometheus, Grafana" },
-  { category: "Infrastructure as code", values: "Terraform, Ansible" },
-  { category: "DevOps", values: "GitHub Actions, GitLab CI" },
+const SKILLS = [
+  {
+    category: "Scripting",
+    values: ["Bash", "PowerShell", "Python", "Template ARM"],
+  },
+  {
+    category: "Systèmes",
+    values: ["Linux", "Windows Server", "WSL"],
+  },
+  {
+    category: "Réseau",
+    values: ["IP", "Firewall", "DNS", "VLAN"],
+  },
+  {
+    category: "Dépôt",
+    values: ["GitHub", "GitLab", "Azure DevOps"],
+  },
+  {
+    category: "Microsoft Azure",
+    values: ["Entra ID", "Key Vault", "Azure Monitor", "ARM Templates"],
+  },
+  {
+    category: "Virtualisation",
+    values: ["Hyper-V", "VMware", "VirtualBox"],
+  },
 ];
 
 export function Skills() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  const cursorOpacity = useMotionValue(0);
-
-  const springX = useSpring(cursorX, { damping: 25, stiffness: 200 });
-  const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
-  const springOpacity = useSpring(cursorOpacity, { damping: 20, stiffness: 300 });
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      cursorOpacity.set(1);
-    };
-
-    const handleMouseLeave = () => {
-      cursorOpacity.set(0);
-    };
-
-    section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [cursorX, cursorY, cursorOpacity]);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const cursorProps = useCursorSection("Mes compétences actuelles");
 
   return (
-    <section ref={sectionRef} id="skills" className="relative select-none px-6 py-24 md:px-12 lg:px-20 cursor-default">
-      {/* Cursor follower text */}
-      <motion.div
-        className="pointer-events-none fixed z-50"
-        style={{
-          left: springX,
-          top: springY,
-          x: 20,
-          y: 20,
-          opacity: springOpacity,
-        }}
+    <section
+      id="skills"
+      {...cursorProps}
+      className="relative cursor-default select-none overflow-hidden px-5 py-28 sm:px-8 md:px-10 md:py-32 lg:px-14"
+    >
+      {/* Numéro filigrane */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute right-6 top-16 hidden select-none font-serif leading-none text-foreground/[0.08] md:block md:right-12 lg:right-20"
+        style={{ fontSize: "clamp(120px, 20vw, 300px)" }}
       >
-        <p className="whitespace-nowrap rounded-full border border-muted-foreground/20 bg-background/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm sm:text-[11px] sm:tracking-[0.2em]">
-          Mes compétences actuelles
-        </p>
-      </motion.div>
+        03
+      </span>
 
-      {/* Section label */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-16 text-[15px] font-medium uppercase tracking-[0.2em] text-muted-foreground"
+      {/* Section label — text reveal */}
+      <div className="mb-4 overflow-hidden">
+        <motion.p
+          initial={{ y: "110%" }}
+          whileInView={{ y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-[15px] font-medium uppercase tracking-[0.2em] text-muted-foreground"
+        >
+          Compétences
+        </motion.p>
+      </div>
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-16 font-serif text-[16vw] leading-none tracking-tight text-foreground sm:text-[12vw] md:text-[9vw] lg:text-[7vw] md:mb-20"
       >
         Compétences
-      </motion.p>
+      </motion.h2>
 
-      {/* Compétences acquises */}
-      <div className="mb-10">
-        <h2 className="mb-6 text-lg font-semibold uppercase tracking-[0.15em] text-[#388E3C]">Compétences acquises</h2>
-        <div className="flex flex-col gap-0">
-          {SKILLS_ACQUIS.map((skill, i) => (
+      <div className="flex flex-col">
+        {SKILLS.map((skill, i) => (
+          <motion.div
+            key={skill.category}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            whileInView={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            animate={{
+              opacity: hovered && hovered !== skill.category ? 0.25 : 1,
+            }}
+            className="relative border-b border-border"
+            onMouseEnter={() => setHovered(skill.category)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            {/* Ligne verte qui s'étire au hover */}
             <motion.div
-              key={skill.category}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="group flex flex-col gap-2 border-b border-border py-6 transition-colors duration-300 hover:text-[#388E3C] md:flex-row md:items-baseline md:gap-16"
-            >
-              <p className="w-48 shrink-0 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-hover:text-[#388E3C]">
-                {skill.category}
-              </p>
-              <p className="text-base text-foreground transition-colors duration-300 group-hover:text-[#388E3C]">
-                {skill.values}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+              className="absolute bottom-0 left-0 h-px"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: hovered === skill.category ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              style={{ originX: 0, width: "100%", background: "#22c55e" }}
+            />
+
+            <div className="flex flex-col gap-5 py-8 md:flex-row md:items-center md:gap-0 md:py-10 lg:py-12">
+
+              {/* Catégorie — fixe à gauche */}
+              <div className="flex min-w-0 gap-4 md:w-[45%] md:gap-8 md:pr-12">
+                <motion.span
+                  animate={{ color: hovered === skill.category ? "#22c55e" : "" }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-1 w-7 shrink-0 text-[11px] tabular-nums text-muted-foreground md:w-8 md:text-sm"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </motion.span>
+                <motion.p
+                  animate={{ x: hovered === skill.category ? 8 : 0 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-serif text-2xl tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl"
+                >
+                  {skill.category}
+                </motion.p>
+              </div>
+
+              {/* Tags — droite */}
+              <motion.div
+                animate={{ x: hovered === skill.category ? 8 : 0 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-wrap gap-2 pl-11 md:w-[55%] md:pl-0"
+              >
+                {skill.values.map((tag, j) => (
+                  <motion.span
+                    key={tag}
+                    initial={{ opacity: 0, y: 6 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.08 + j * 0.04 }}
+                    className="rounded-full border border-border px-3 py-1 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground transition-colors duration-200"
+                    style={{
+                      borderColor: hovered === skill.category ? "rgba(34,197,94,0.3)" : "",
+                      color: hovered === skill.category ? "rgb(34,197,94)" : "",
+                    }}
+                  >
+                    {tag}
+                  </motion.span>
+                ))}
+              </motion.div>
+
+            </div>
+          </motion.div>
+        ))}
       </div>
 
-      {/* Compétences en cours */}
-      <div>
-        <h2 className="mb-6 text-lg font-semibold uppercase tracking-[0.15em] text-[#388E3C]">Compétences en cours</h2>
-        <div className="flex flex-col gap-0">
-          {SKILLS_EN_COURS.map((skill, i) => (
-            <motion.div
-              key={skill.category}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="group flex flex-col gap-2 border-b border-border py-6 transition-colors duration-300 hover:text-[#388E3C] md:flex-row md:items-baseline md:gap-16"
-            >
-              <p className="w-48 shrink-0 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-hover:text-[#388E3C]">
-                {skill.category}
-              </p>
-              <p className="text-base text-foreground transition-colors duration-300 group-hover:text-[#388E3C]">
-                {skill.values}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Separator */}
-      <div className="mt-24 h-px w-full bg-border" />
     </section>
   );
 }

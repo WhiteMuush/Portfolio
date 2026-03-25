@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence, useMotionValue, useSpring } from "motion/react";
-import { Star, ChevronDown } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring, AnimatePresence } from "motion/react";
+import { Star } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useCursorSection } from "@/hooks/use-cursor-section";
 
 interface Project {
   num: string;
@@ -12,214 +13,250 @@ interface Project {
   stars?: number;
   stack: string;
   url: string;
+  image: string;
+  preview: string[];
 }
 
 const PROJECTS: Project[] = [
   {
     num: "01",
     name: "SANDEVISTAN",
-    desc: "Boîte à outils de pentest personnalisée avec plus de 30 outils de test d'intrusion et de red teaming",
-    why: "J'ai créé Sandevistan pour centraliser mes outils de pentest dans une interface unifiée. Plutôt que de jongler entre des dizaines de scripts éparpillés, j'ai voulu proposer une suite cohérente avec mise à jour automatique et configuration modulaire, améliorant ainsi mon efficacité lors des engagements offensifs.",
+    desc: "Boîte à outils de pentest avec plus de 30 outils de test d'intrusion et de red teaming",
+    why: "Suite cohérente avec mise à jour automatique et configuration modulaire — centralise tous mes outils offensifs dans une interface unifiée.",
     stars: 98,
     stack: "Bash",
-    url: "https://GitHub.com/WhiteMuush/Sandevistan",
+    url: "https://github.com/WhiteMuush/Sandevistan",
+    image: "/projects/sandevistan.jpg",
+    preview: [],
   },
   {
     num: "02",
-    name: "PLUTUS",
-    desc: "Déploiement d'infrastructure + synchronisation de serveurs",
-    why: "J'ai développé Plutus pour automatiser le provisionnement et la synchronisation de serveurs dans des environnements multi-nodes. L'objectif était de réduire les erreurs humaines lors des déploiements répétitifs et de garantir une cohérence totale entre les machines de production.",
-    stack: "Bash & PowerShell",
-    url: "https://GitHub.com/WhiteMuush/Plutus---ProjetFilsRouge01",
+    name: "KRAKEN",
+    desc: "Framework de pentest modulaire extensible",
+    why: "Chaque module peut être ajouté, retiré ou mis à jour indépendamment — s'adapte à chaque mission sans fonctionnalités superflues.",
+    stars: 6,
+    stack: "Bash",
+    url: "https://github.com/WhiteMuush/Kraken",
+    image: "/projects/kraken.jpg",
+    preview: [],
   },
   {
     num: "03",
     name: "GHOSTLINE",
-    desc: "Boîte à outils d'énumération AD avec plus de 10 outils intégrés",
-    why: "L'énumération Active Directory est une phase critique de tout pentest interne. Ghostline regroupe les outils les plus pertinents dans un workflow structuré, permettant une reconnaissance rapide et méthodique des environnements AD sans perdre de temps en configuration manuelle.",
+    desc: "Boîte à outils d'énumération Active Directory avec plus de 10 outils intégrés",
+    why: "L'énumération Active Directory est une phase critique de tout pentest interne. Ghostline regroupe les outils les plus pertinents dans un workflow structuré, permettant une reconnaissance rapide et méthodique des environnements AD.",
+    stars: 1,
     stack: "Bash",
-    url: "https://GitHub.com/WhiteMuush/Ghostline",
+    url: "https://github.com/WhiteMuush/Ghostline",
+    image: "/projects/ghostline.jpg",
+    preview: [],
   },
   {
     num: "04",
-    name: "KRAKEN",
-    desc: "Framework de pentest modulaire",
-    why: "Kraken est né du besoin d'avoir un framework extensible où chaque module peut être ajouté, retiré ou mis à jour indépendamment. Cette approche modulaire permet d'adapter l'outil à chaque mission sans embarquer de fonctionnalités superflues, tout en gardant une base solide et maintenable.",
+    name: "FEEDYOURSPIDER",
+    desc: "Vérificateur de santé réseau mesurant connectivité et temps de réponse",
+    why: "Surveille rapidement la santé d'un réseau sans dépendre d'outils lourds — mesure connectivité et anomalies en temps réel.",
+    stars: 2,
     stack: "Bash",
-    url: "https://GitHub.com/WhiteMuush/Kraken",
+    url: "https://github.com/WhiteMuush/FeedYourSpider",
+    image: "/projects/feedyourspider.jpg",
+    preview: [],
   },
   {
     num: "05",
-    name: "FRESHLINUX",
-    desc: "Sécuriser rapidement une machine Linux fraîchement installée",
-    why: "Une installation Linux par défaut laisse de nombreuses surfaces d'attaque exposées. FreshLinux applique automatiquement un ensemble de durcissements, pare-feu, désactivation de services inutiles, configuration SSH, et audit des permissions pour atteindre un niveau de sécurité de base en quelques minutes.",
-    stack: "Bash",
-    url: "https://GitHub.com/WhiteMuush/FreshLinux",
+    name: "WAKESSH",
+    desc: "Réveil à distance via Wake-on-LAN et connexion SSH automatique sur Windows",
+    why: "Administre des machines Windows à distance sans les laisser allumées — combine WoL et SSH dans un seul workflow automatisé.",
+    stack: "PowerShell",
+    url: "https://github.com/WhiteMuush/WakeSSH_WIN",
+    image: "/projects/wakessh.jpg",
+    preview: [],
   },
   {
     num: "06",
-    name: "WakeSSH",
-    desc: "Réveil à distance via Wake-on-LAN et connexion SSH automatique sur Windows, avec une interface graphique simple",
-    why: "WakeSSH_WIN permet de réveiller une machine distante via Wake-on-LAN puis de s'y connecter automatiquement en SSH une fois qu'elle est en ligne. C'est un outil pratique pour administrer des machines Windows à distance sans avoir à les laisser allumées en permanence, combinant WoL et SSH dans un seul workflow.",
-    stack: "PowerShell",
-    url: "https://GitHub.com/WhiteMuush/WakeSSH_WIN",
+    name: "PLUTUS",
+    desc: "Déploiement d'infrastructure + synchronisation de serveurs multi-nodes",
+    why: "Réduit les erreurs humaines lors des déploiements répétitifs et garantit une cohérence totale entre les machines de production.",
+    stack: "Bash & PowerShell",
+    url: "https://github.com/WhiteMuush/Plutus---ProjetFilsRouge01",
+    image: "/projects/plutus.jpg",
+    preview: [],
   },
 ];
 
-function ProjectRow({ project, index }: { project: Project; index: number }) {
-  const [expanded, setExpanded] = useState(false);
+export function Projects() {
+  const [hovered, setHovered] = useState<Project | null>(null);
+
+  const cursorX = useMotionValue(-400);
+  const cursorY = useMotionValue(-400);
+  const springX = useSpring(cursorX, { damping: 22, stiffness: 160 });
+  const springY = useSpring(cursorY, { damping: 22, stiffness: 160 });
+
+  const cursorProps = useCursorSection("");
+
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [cursorX, cursorY]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.06 }}
-      className="border-b border-border"
+    <section
+      id="projects"
+      {...cursorProps}
+      className="relative overflow-hidden px-5 py-28 sm:px-8 md:px-10 md:py-32 lg:px-14"
     >
-      <div
-        className="group flex cursor-pointer items-baseline gap-4 py-5 transition-colors duration-300 md:gap-6"
-        onClick={() => setExpanded((prev) => !prev)}
+      {/* Numéro filigrane */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute right-6 top-16 hidden select-none font-serif leading-none text-foreground/[0.08] md:block md:right-12 lg:right-20"
+        style={{ fontSize: "clamp(120px, 20vw, 300px)" }}
       >
-        {/* Number */}
-        <span className="w-8 shrink-0 text-sm tabular-nums text-muted-foreground transition-colors duration-300 group-hover:text-accent">
-          {project.num}
-        </span>
+        01
+      </span>
 
-        {/* Name */}
-        <span className="relative shrink-0 font-serif text-lg tracking-wide text-foreground transition-colors duration-300 group-hover:text-foreground md:text-xl">
-          {project.name}
-          <span className="absolute bottom-0 left-0 h-px w-0 bg-foreground transition-all duration-500 group-hover:w-full" />
-        </span>
-
-        {/* Separator dash */}
-        <span className="hidden text-muted-foreground/40 md:inline">&mdash;</span>
-
-        {/* Description */}
-        <span className="hidden flex-1 text-sm text-muted-foreground md:inline">
-          {project.desc}
-        </span>
-
-        {/* Stars */}
-        {project.stars && (
-          <span className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
-            <Star className="h-3 w-3" />
-            {project.stars}
-          </span>
-        )}
-
-        {/* Stack */}
-        <span className="ml-auto text-[11px] font-medium uppercase tracking-[0.15em] text-muted-foreground md:ml-0">
-          {project.stack}
-        </span>
-
-        {/* Expand icon */}
-        <span className="text-sm text-muted-foreground transition-all duration-300 group-hover:text-foreground">
-          <ChevronDown
-            className={`h-4 w-4 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
-          />
-        </span>
-      </div>
-
-      {/* Expandable "why" section */}
-      <AnimatePresence initial={false}>
-        {expanded && (
+      {/* Image flottante qui suit le curseur */}
+      <AnimatePresence>
+        {hovered && (
           <motion.div
-            key="why"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="overflow-hidden"
+            key={hovered.num}
+            className="pointer-events-none fixed z-50 hidden md:block"
+            style={{ left: springX, top: springY, x: 28, y: "-50%" }}
+            initial={{ opacity: 0, scale: 0.93 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="flex items-start gap-4 pb-5 pl-12 md:gap-6 md:pl-14">
-              <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                {project.why}
-              </p>
-                <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-auto shrink-0 text-[11px] font-medium uppercase tracking-[0.15em] text-red-500 underline underline-offset-4 transition-colors duration-300 hover:text-red-400"
-                >
-                Voir sur GitHub ↗
-                </a>
+            <div className="h-[360px] w-[580px] overflow-hidden rounded-sm border border-border shadow-2xl lg:h-[440px] lg:w-[700px]">
+              <motion.img
+                key={hovered.image}
+                src={hovered.image}
+                alt={hovered.name}
+                className="h-full w-full object-cover"
+                initial={{ scale: 1.08, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
-  );
-}
 
-export function Projects() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  const springX = useSpring(cursorX, { damping: 25, stiffness: 200 });
-  const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
-  const isCursorInSection = useMotionValue(0);
-  const springOpacity = useSpring(isCursorInSection, { damping: 20, stiffness: 150 });
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-
-      const rect = section.getBoundingClientRect();
-      const inside =
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
-      isCursorInSection.set(inside ? 1 : 0);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [cursorX, cursorY, isCursorInSection]);
-
-  return (
-    <section ref={sectionRef} id="projects" className="relative px-6 py-24 md:px-12 lg:px-20">
-      {/* Cursor follower */}
-      <motion.div
-        className="pointer-events-none fixed z-50"
-        style={{
-          left: springX,
-          top: springY,
-          x: 20,
-          y: 20,
-          opacity: springOpacity,
-        }}
+      {/* Section label — text reveal */}
+      <div className="mb-4 overflow-hidden">
+        <motion.p
+          initial={{ y: "110%" }}
+          whileInView={{ y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-[15px] font-medium uppercase tracking-[0.2em] text-muted-foreground"
+        >
+          Mes projets en tant que Junior
+        </motion.p>
+      </div>
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-16 font-serif text-[16vw] leading-none tracking-tight text-foreground sm:text-[12vw] md:text-[9vw] lg:text-[7vw] md:mb-20"
       >
-        <p className="whitespace-nowrap rounded-full border border-muted-foreground/20 bg-background/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm sm:text-[11px] sm:tracking-[0.2em]">
-          Cliquez pour découvrir
-        </p>
-      </motion.div>
+        Projets
+      </motion.h2>
 
-      {/* Section label */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-16 text-[15px] font-medium uppercase tracking-[0.2em] text-muted-foreground"
-      >
-        Mes projets en tant que Junior
-      </motion.p>
-
-      {/* Project list */}
+      {/* Liste */}
       <div className="flex flex-col">
         {PROJECTS.map((project, i) => (
-          <ProjectRow key={project.num} project={project} index={i} />
+          <motion.div
+            key={project.num}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            whileInView={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            animate={{
+              opacity: hovered && hovered.num !== project.num ? 0.25 : 1,
+            }}
+            className="group/row relative border-b border-border"
+            onMouseEnter={() => setHovered(project)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            {/* Ligne rouge qui s'étire au hover */}
+            <motion.div
+              className="absolute bottom-0 left-0 h-px bg-accent"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: hovered?.num === project.num ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              style={{ originX: 0, width: "100%" }}
+            />
+
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start justify-between gap-6 py-8 md:py-10 lg:py-12"
+            >
+              {/* num + name + desc */}
+              <div className="flex min-w-0 gap-4 md:gap-8">
+                <motion.span
+                  animate={{ color: hovered?.num === project.num ? "#e63030" : "" }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-2 w-7 shrink-0 text-[11px] tabular-nums text-muted-foreground md:w-8 md:text-sm"
+                >
+                  {project.num}
+                </motion.span>
+                <div className="min-w-0">
+                  <motion.p
+                    animate={{ x: hovered?.num === project.num ? 10 : 0 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="font-serif text-2xl tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl"
+                  >
+                    {project.name}
+                  </motion.p>
+                  <motion.p
+                    animate={{
+                      opacity: hovered?.num === project.num ? 1 : 0.5,
+                      x: hovered?.num === project.num ? 10 : 0,
+                    }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base"
+                  >
+                    {project.desc}
+                  </motion.p>
+                </div>
+              </div>
+
+              {/* stack + stars + arrow */}
+              <div className="flex shrink-0 flex-col items-end gap-2 pt-1">
+                <motion.span
+                  animate={{
+                    x: hovered?.num === project.num ? 2 : 0,
+                    y: hovered?.num === project.num ? -2 : 0,
+                    color: hovered?.num === project.num ? "#e63030" : "",
+                  }}
+                  transition={{ duration: 0.25 }}
+                  className="text-xl text-muted-foreground"
+                >
+                  ↗
+                </motion.span>
+                {project.stars && (
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Star className="h-2.5 w-2.5" />
+                    {project.stars}
+                  </span>
+                )}
+                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                  {project.stack}
+                </span>
+              </div>
+            </a>
+          </motion.div>
         ))}
       </div>
 
-      {/* Separator */}
-      <div className="mt-24 h-px w-full bg-border" />
     </section>
   );
 }
