@@ -112,14 +112,14 @@ export function Schools() {
 
             {/* Row cliquable */}
             <div
-              className="flex cursor-pointer items-start justify-between gap-6 py-8 md:py-10 lg:py-12"
+              className="flex cursor-pointer items-start justify-between gap-3 py-8 sm:gap-6 md:py-10 lg:py-12"
               onClick={() => setExpanded(expanded === school.name ? null : school.name)}
             >
-              <div className="flex min-w-0 gap-4 md:gap-8">
+              <div className="flex min-w-0 gap-3 sm:gap-4 md:gap-8">
                 <motion.span
                   animate={{ color: hovered?.name === school.name ? "#3b82f6" : "" }}
                   transition={{ duration: 0.2 }}
-                  className="mt-2 w-28 shrink-0 text-[11px] tabular-nums text-muted-foreground md:text-sm"
+                  className="mt-2 hidden w-28 shrink-0 text-[11px] tabular-nums text-muted-foreground sm:block md:text-sm"
                 >
                   {school.year}
                 </motion.span>
@@ -137,7 +137,7 @@ export function Schools() {
                       x: hovered?.name === school.name ? 10 : 0,
                     }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base"
+                    className="mt-1 text-xs leading-relaxed text-muted-foreground sm:mt-2 sm:text-sm md:text-base"
                   >
                     {school.diploma}
                   </motion.p>
@@ -171,7 +171,7 @@ export function Schools() {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   className="overflow-hidden"
                 >
-                  <p className="pb-8 pl-32 pr-12 text-sm leading-relaxed text-muted-foreground md:pl-36 md:text-base lg:pb-10">
+                  <p className="pb-8 pl-0 pr-4 text-sm leading-relaxed text-muted-foreground sm:pl-32 sm:pr-12 md:pl-36 md:text-base lg:pb-10">
                     {school.desc}
                   </p>
                 </motion.div>

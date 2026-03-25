@@ -37,7 +37,7 @@ export function Contact() {
     };
   }, []);
 
-  const text = "Travaillons ensemble.";
+  const text = "Travaillons ensemble !";
 
   return (
     <section

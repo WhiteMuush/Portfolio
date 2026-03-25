@@ -16,7 +16,7 @@ export function Grain() {
       const imageData = ctx.createImageData(width, height);
       const data = imageData.data;
       for (let i = 0; i < data.length; i += 4) {
-        const v = (Math.random() * 255) | 0;
+        const v = (Math.random() * 100) | 0;
         data[i] = v;
         data[i + 1] = v;
         data[i + 2] = v;
@@ -41,7 +41,7 @@ export function Grain() {
       ref={canvasRef}
       aria-hidden
       className="pointer-events-none fixed inset-0 z-[998]"
-      style={{ opacity: 0.15 }}
+      style={{ opacity: 1 }}
     />
   );
 }

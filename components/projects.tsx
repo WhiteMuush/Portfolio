@@ -197,14 +197,14 @@ export function Projects() {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-start justify-between gap-6 py-8 md:py-10 lg:py-12"
+              className="flex items-start justify-between gap-3 py-8 sm:gap-6 md:py-10 lg:py-12"
             >
               {/* num + name + desc */}
-              <div className="flex min-w-0 gap-4 md:gap-8">
+              <div className="flex min-w-0 gap-3 sm:gap-4 md:gap-8">
                 <motion.span
                   animate={{ color: hovered?.num === project.num ? "#e63030" : "" }}
                   transition={{ duration: 0.2 }}
-                  className="mt-2 w-7 shrink-0 text-[11px] tabular-nums text-muted-foreground md:w-8 md:text-sm"
+                  className="mt-2 hidden w-7 shrink-0 text-[11px] tabular-nums text-muted-foreground sm:block md:w-8 md:text-sm"
                 >
                   {project.num}
                 </motion.span>
@@ -222,7 +222,7 @@ export function Projects() {
                       x: hovered?.num === project.num ? 10 : 0,
                     }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base"
+                    className="mt-1 text-xs leading-relaxed text-muted-foreground sm:mt-2 sm:text-sm md:text-base"
                   >
                     {project.desc}
                   </motion.p>

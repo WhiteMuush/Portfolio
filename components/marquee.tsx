@@ -6,7 +6,7 @@ import { useRef } from "react";
 const ITEMS = [
   "Bash", "PowerShell", "Linux", "Microsoft Azure",
   "DevOps", "Scripting", "Automatisation", "Cloud",
-  "Sécurité", "Infrastructure", "CI/CD", "Git",
+  "Sécurité", "Infrastructure", "Réseau", "Git",
 ];
 
 export function Marquee() {
