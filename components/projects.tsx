@@ -89,7 +89,7 @@ const PROJECTS: Project[] = [
     why: "Centralise le déploiement et la gestion d'un arsenal d'outils de sécurité dans une interface unifiée — simplifie la mise en place d'un environnement de travail complet en une seule commande.",
     stack: "Bash",
     url: "https://github.com/WhiteMuush/Medusa",
-    image: "/projects/medusa.jpg",
+    image: "/projects/Medusa.jpg",
     preview: [],
   },
 ];
