@@ -82,6 +82,16 @@ const PROJECTS: Project[] = [
     image: "/projects/plutus.jpg",
     preview: [],
   },
+  {
+    num: "07",
+    name: "MEDUSA",
+    desc: "Toolkit d'orchestration déployant et gérant 35 outils open source de cybersécurité via menu interactif ou CLI",
+    why: "Centralise le déploiement et la gestion d'un arsenal d'outils de sécurité dans une interface unifiée — simplifie la mise en place d'un environnement de travail complet en une seule commande.",
+    stack: "Bash",
+    url: "https://github.com/WhiteMuush/Medusa",
+    image: "/projects/medusa.jpg",
+    preview: [],
+  },
 ];
 
 export function Projects() {
